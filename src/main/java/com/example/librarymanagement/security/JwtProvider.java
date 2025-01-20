@@ -2,6 +2,7 @@ package com.example.librarymanagement.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -13,8 +14,11 @@ import java.util.Set;
 
 public class JwtProvider {
 
+    @Value("${spring.security.secret-key}")
+    private static String secretKey;
+
     public static String generateToken(Authentication authentication) {
-        SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
+        SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
         String roles = populate(authorities);

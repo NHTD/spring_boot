@@ -14,6 +14,8 @@ public enum ErrorCode {
     USER_EXISTED(HttpStatus.CONFLICT.value(), "User existed", HttpStatus.CONFLICT.getReasonPhrase()),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "User not found", HttpStatus.NOT_FOUND.getReasonPhrase()),
 
+    ROLE_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "Role not found", HttpStatus.NOT_FOUND.getReasonPhrase()),
+
     CATEGORY_EXISTED(HttpStatus.CONFLICT.value(), "Category existed", HttpStatus.CONFLICT.getReasonPhrase()),
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "This category is not found", HttpStatus.NOT_FOUND.getReasonPhrase()),
 
@@ -23,6 +25,7 @@ public enum ErrorCode {
     STATUS_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "This status is not supported", HttpStatus.NOT_FOUND.getReasonPhrase()),
 
     FORBIDDEN(HttpStatus.FORBIDDEN.value(), "Invalid token", HttpStatus.FORBIDDEN.getReasonPhrase()),
+    PASSWORD_NOT_VALID(HttpStatus.BAD_REQUEST.value(), "Password is not valid", HttpStatus.BAD_REQUEST.getReasonPhrase()),
     ;
 
     private int value;

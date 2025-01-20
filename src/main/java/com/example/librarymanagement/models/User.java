@@ -1,5 +1,6 @@
 package com.example.librarymanagement.models;
 
+import com.example.librarymanagement.enums.UserStatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -39,6 +40,10 @@ public class User implements UserDetails {
 
     @Column(name = "confirm_password")
     String confirmPassword;
+
+    @Column(name = "status")
+    @Enumerated()
+    UserStatusEnum status;
 
     @Column(name = "created_at")
     LocalDateTime createdAt;

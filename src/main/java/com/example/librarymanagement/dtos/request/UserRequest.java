@@ -19,4 +19,7 @@ public class UserRequest {
     String email;
 
     String password;
+
+    @JsonProperty("confirm_password")
+    String confirmPassword;
 }
