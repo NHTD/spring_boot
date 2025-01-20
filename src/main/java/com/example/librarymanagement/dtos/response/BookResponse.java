@@ -1,0 +1,35 @@
+package com.example.librarymanagement.dtos.response;
+
+import com.example.librarymanagement.enums.BookStatusEnum;
+import com.example.librarymanagement.models.Category;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.time.LocalDateTime;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class BookResponse {
+    Long id;
+
+    String title;
+
+    String image;
+
+    String description;
+
+    Category category;
+
+    @JsonProperty("status")
+    BookStatusEnum status;
+
+    @JsonProperty("created_at")
+    LocalDateTime createdAt;
+
+    @JsonProperty("updated_at")
+    LocalDateTime updatedAt;
+}
