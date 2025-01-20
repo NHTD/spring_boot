@@ -21,6 +21,8 @@ public enum ErrorCode {
     BOOK_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "This book is not found", HttpStatus.NOT_FOUND.getReasonPhrase()),
 
     STATUS_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "This status is not supported", HttpStatus.NOT_FOUND.getReasonPhrase()),
+
+    FORBIDDEN(HttpStatus.FORBIDDEN.value(), "Invalid token", HttpStatus.FORBIDDEN.getReasonPhrase()),
     ;
 
     private int value;
