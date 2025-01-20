@@ -25,9 +25,6 @@ import java.util.List;
 
 public class JwtTokenValidate extends OncePerRequestFilter {
 
-    @Value("${spring.security.secret-key}")
-    String secretKey;
-
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -37,7 +34,7 @@ public class JwtTokenValidate extends OncePerRequestFilter {
         String jwt = request.getHeader(HttpHeaders.AUTHORIZATION);
         if(jwt!=null){
             try {
-                SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
+                SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
                 String token = jwt.split(" ")[1];
                 Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
 

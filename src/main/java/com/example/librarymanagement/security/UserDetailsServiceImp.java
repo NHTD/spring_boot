@@ -31,7 +31,7 @@ public class UserDetailsServiceImp implements UserDetailsService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority("Role_"+role.getName()))
+                .map(role -> new SimpleGrantedAuthority("ROLE_"+role.getName()))
                 .collect(Collectors.toList());
 
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);

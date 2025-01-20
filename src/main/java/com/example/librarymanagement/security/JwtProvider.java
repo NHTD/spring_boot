@@ -14,11 +14,8 @@ import java.util.Set;
 
 public class JwtProvider {
 
-    @Value("${spring.security.secret-key}")
-    private static String secretKey;
-
     public static String generateToken(Authentication authentication) {
-        SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
+        SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
         String roles = populate(authorities);

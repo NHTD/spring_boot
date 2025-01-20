@@ -29,7 +29,7 @@ public class SecurityConfig {
 
     final UserDetailsService userDetailService;
 
-    final String[] POST_PUBLIC = {"/users"};
+    final String[] POST_PUBLIC = {"/users", "/authenticate"};
     final String[] GET_PUBLIC = {"/users/**", "/categories"};
 
     @Bean
@@ -37,8 +37,8 @@ public class SecurityConfig {
         http
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JwtTokenValidate(), BasicAuthenticationFilter.class)
-                .exceptionHandling(customizer -> customizer.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-                .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, POST_PUBLIC).permitAll()
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers(HttpMethod.POST, POST_PUBLIC).permitAll()
                         .requestMatchers(HttpMethod.GET, GET_PUBLIC).permitAll()
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
