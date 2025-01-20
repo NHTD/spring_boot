@@ -2,6 +2,7 @@ package com.example.librarymanagement.dtos.response;
 
 import com.example.librarymanagement.enums.BookStatusEnum;
 import com.example.librarymanagement.models.Category;
+import com.example.librarymanagement.models.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -23,6 +24,8 @@ public class BookResponse {
     String description;
 
     Category category;
+
+    User user;
 
     @JsonProperty("status")
     BookStatusEnum status;

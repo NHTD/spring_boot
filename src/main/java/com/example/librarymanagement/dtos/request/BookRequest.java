@@ -24,6 +24,9 @@ public class BookRequest {
     @JsonProperty("category_id")
     Long categoryId;
 
+    @JsonProperty("user_id")
+    String userId;
+
     @JsonProperty("status")
     BookStatusEnum status;
 }

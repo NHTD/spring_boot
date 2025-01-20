@@ -12,9 +12,9 @@ public class GlobalExceptionHandler {
     ResponseEntity<ApiExceptionResponse> handleRunTimeException(RuntimeException exception) {
         ApiExceptionResponse apiExceptionResponse = new ApiExceptionResponse();
 
-        apiExceptionResponse.setValue(ErrorCode.RUNTIME_EXCEPTION.getValue());
-        apiExceptionResponse.setMessage(ErrorCode.RUNTIME_EXCEPTION.getMessage());
-        apiExceptionResponse.setReasonPhrase(ErrorCode.RUNTIME_EXCEPTION.getMessage());
+        apiExceptionResponse.setValue(ErrorCode.BAD_REQUEST.getValue());
+        apiExceptionResponse.setMessage(ErrorCode.BAD_REQUEST.getMessage());
+        apiExceptionResponse.setReasonPhrase(ErrorCode.BAD_REQUEST.getMessage());
 
         return ResponseEntity.badRequest().body(apiExceptionResponse);
     }

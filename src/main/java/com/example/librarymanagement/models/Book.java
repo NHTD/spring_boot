@@ -20,7 +20,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "title", length = 200)
+    @Column(name = "title", length = 20, nullable = false)
     String title;
 
     @Column(name = "image")
@@ -32,6 +32,10 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "category_id")
     Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    User user;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
