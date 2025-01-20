@@ -29,7 +29,7 @@ CREATE TABLE categories (
 );
 
 CREATE TABLE books (
-    id BIGSERIAL PRIMARY KEY,
+    id BIGINT PRIMARY KEY,
     title VARCHAR(20) NOT NULL,
     image VARCHAR(255),
     description TEXT,
@@ -43,7 +43,7 @@ CREATE TABLE books (
 );
 
 CREATE TABLE transactions (
-    id BIGSERIAL PRIMARY KEY,
+    id BIGINT PRIMARY KEY,
     user_id UUID,
     book_id BIGINT,
     borrow_date TIMESTAMP,
