@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "roles")
+@Table(name = "books")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Book {
 
