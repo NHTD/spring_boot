@@ -1,0 +1,40 @@
+services:
+  mysql-container:
+    container_name: mysql-container
+    image: mysql:8.0.36
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: library
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - library-network
+
+  library-spring-container:
+    container_name: library-spring-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    environment:
+      DATABASE_HOST: mysql-container
+      DATABASE_PORT: 3306
+      DATABASE_NAME: library
+      SPRING_DATASOURCE_USERNAME: root
+      MYSQL_ROOT_PASSWORD: root
+    depends_on:
+      - mysql-container
+    networks:
+      - library-network
+
+networks:
+  library-network:
+    name: library-network
+
+volumes:
+  mysql-data:
+    driver: local
