@@ -1,6 +1,7 @@
 package com.example.librarymanagement.services.servicesImp;
 
 import com.example.librarymanagement.dtos.request.UserRequest;
+import com.example.librarymanagement.dtos.request.UserUpdateRequest;
 import com.example.librarymanagement.dtos.response.UserResponse;
 import com.example.librarymanagement.enums.UserStatusEnum;
 import com.example.librarymanagement.exceptions.AppException;
@@ -18,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +49,7 @@ public class UserServiceImp implements UserService {
         }
 
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setConfirmPassword(passwordEncoder.encode(request.getPassword()));
 
         Role role = roleRepository.findRoleByName("USER")
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
@@ -53,5 +57,34 @@ public class UserServiceImp implements UserService {
         user.setRoles(Collections.singleton(role));
 
         return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    @Override
+    public List<UserResponse> getAllUser() {
+        return userRepository.findAll()
+                .stream()
+                .map(userMapper::toUserResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserResponse updateUser(String userId, UserUpdateRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        userMapper.toUpdateUser(user, request);
+
+        if(request.getStatus().equals(UserStatusEnum.VALID)){
+            user.setStatus(UserStatusEnum.VALID);
+        } else if(request.getStatus().equals(UserStatusEnum.INVALID)) {
+            user.setStatus(UserStatusEnum.INVALID);
+        }
+
+        return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    @Override
+    public void deleteUser(String userId) {
+        userRepository.deleteById(userId);
     }
 }

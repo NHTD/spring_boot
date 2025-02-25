@@ -35,6 +35,15 @@ public class User implements UserDetails {
     @Column(name = "email")
     String email;
 
+    @Column(columnDefinition = "LONGTEXT")
+    String avatar;
+
+    @Column(name = "gender")
+    String gender;
+
+    @Column(name = "age")
+    int age;
+
     @Column(name = "password")
     String password;
 

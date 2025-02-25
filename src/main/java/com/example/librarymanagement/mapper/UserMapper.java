@@ -1,6 +1,7 @@
 package com.example.librarymanagement.mapper;
 
 import com.example.librarymanagement.dtos.request.UserRequest;
+import com.example.librarymanagement.dtos.request.UserUpdateRequest;
 import com.example.librarymanagement.dtos.response.UserResponse;
 import com.example.librarymanagement.models.User;
 import org.mapstruct.Mapper;
@@ -13,5 +14,5 @@ public interface UserMapper {
     User toUser(UserRequest request);
     UserResponse toUserResponse(User user);
 
-    void toUpdateUser(@MappingTarget User user, UserRequest request);
+    void toUpdateUser(@MappingTarget User user, UserUpdateRequest request);
 }

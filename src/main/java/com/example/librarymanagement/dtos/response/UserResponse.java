@@ -1,8 +1,10 @@
 package com.example.librarymanagement.dtos.response;
 
+import com.example.librarymanagement.enums.UserStatusEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import java.time.LocalDateTime;
 
@@ -23,6 +25,15 @@ public class UserResponse {
     String email;
 
     String password;
+
+    String avatar;
+
+    String gender;
+
+    @JsonProperty("status")
+    UserStatusEnum status;
+
+    int age;
 
     @JsonProperty("created_at")
     LocalDateTime createdAt;
