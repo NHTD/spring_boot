@@ -1,0 +1,49 @@
+CREATE TABLE users (
+   id VARCHAR(255) PRIMARY KEY,
+   first_name VARCHAR(255),
+   last_name VARCHAR(255),
+   email VARCHAR(255) UNIQUE,
+   password VARCHAR(255),
+   confirm_password VARCHAR(255),
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE roles (
+   name VARCHAR(255) PRIMARY KEY,
+   description VARCHAR(255)
+);
+
+CREATE TABLE categories (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(255) UNIQUE,
+    value VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE books (
+       id BIGINT AUTO_INCREMENT PRIMARY KEY,
+       title VARCHAR(255) NOT NULL,
+       image VARCHAR(255),
+       description TEXT,
+       category_id BIGINT,
+       user_id VARCHAR(255),
+       status VARCHAR(255),
+       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+       CONSTRAINT fk_books_category FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE SET NULL,
+       CONSTRAINT fk_books_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL
+);
+
+CREATE TABLE transactions (
+      id BIGINT AUTO_INCREMENT PRIMARY KEY,
+      user_id VARCHAR(255),
+      book_id BIGINT,
+      borrow_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      return_date TIMESTAMP,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      CONSTRAINT fk_transactions_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL,
+      CONSTRAINT fk_transactions_book FOREIGN KEY (book_id) REFERENCES books (id) ON DELETE SET NULL
+);
