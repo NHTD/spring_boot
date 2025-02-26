@@ -18,9 +18,6 @@ public class BookRequest {
     @JsonProperty("description")
     String description;
 
-    @JsonProperty("image")
-    String image;
-
     @JsonProperty("category_id")
     Long categoryId;
 

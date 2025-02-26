@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -27,8 +28,18 @@ public class BookController {
     BookService bookService;
 
     @PostMapping
-    ResponseEntity<BookResponse> createBook(@RequestBody BookRequest request) {
-        return ResponseEntity.status(HttpStatus.OK).body(bookService.createBook(request, BookStatusEnum.InStock));
+    ResponseEntity<BookResponse> createBook(
+            @ModelAttribute BookRequest request,
+            @RequestPart(value = "avatar", required = false) MultipartFile file
+    ) throws Exception {
+        BookResponse bookResponse = bookService.createBook(request, BookStatusEnum.InStock);
+
+        if(file!=null && !file.isEmpty()){
+            String image = bookService.uploadBookImage(bookResponse.getId(), file);
+            bookResponse.setImage(image);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(bookResponse);
     }
 
     @GetMapping
