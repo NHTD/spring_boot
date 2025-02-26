@@ -19,9 +19,6 @@ public class UserUpdateRequest {
 
     String email;
 
-    @JsonProperty("avatar")
-    String avatar;
-
     @JsonProperty("gender")
     String gender;
 

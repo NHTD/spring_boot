@@ -2,6 +2,7 @@ package com.example.librarymanagement.services.servicesImp;
 
 import com.example.librarymanagement.dtos.request.UserRequest;
 import com.example.librarymanagement.dtos.request.UserUpdateRequest;
+import com.example.librarymanagement.dtos.response.CloudinaryResponse;
 import com.example.librarymanagement.dtos.response.UserResponse;
 import com.example.librarymanagement.enums.UserStatusEnum;
 import com.example.librarymanagement.exceptions.AppException;
@@ -11,12 +12,15 @@ import com.example.librarymanagement.models.Role;
 import com.example.librarymanagement.models.User;
 import com.example.librarymanagement.repositories.RoleRepository;
 import com.example.librarymanagement.repositories.UserRepository;
+import com.example.librarymanagement.services.CloudinaryService;
 import com.example.librarymanagement.services.UserService;
+import com.example.librarymanagement.utils.FileUploadUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +36,8 @@ public class UserServiceImp implements UserService {
 
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
+
+    CloudinaryService cloudinaryService;
 
     @Override
     public UserResponse createUser(UserRequest request, UserStatusEnum status) {
@@ -81,6 +87,20 @@ public class UserServiceImp implements UserService {
         }
 
         return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    @Override
+    public String uploadAvatar(String userId, MultipartFile file) throws Exception {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        FileUploadUtils.assertAllowed(file, FileUploadUtils.IMAGE_PATTERN);
+        String fileName = FileUploadUtils.getFilename(file.getOriginalFilename());
+        CloudinaryResponse response = cloudinaryService.uploadFile(file, fileName);
+        user.setAvatar(response.getUrl());
+        userRepository.save(user);
+
+        return response.getUrl();
     }
 
     @Override

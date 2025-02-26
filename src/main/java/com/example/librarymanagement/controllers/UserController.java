@@ -11,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -33,8 +34,20 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    ResponseEntity<UserResponse> updateUser(@PathVariable("userId") String userId, @RequestBody UserUpdateRequest request) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(userId, request));
+    ResponseEntity<UserResponse> updateUser(
+            @PathVariable("userId") String userId,
+            @ModelAttribute UserUpdateRequest request,
+            @RequestPart(value = "avatar", required = false)MultipartFile file
+            ) throws Exception {
+        UserResponse userResponse = userService.updateUser(userId, request);
+
+        if (file != null && !file.isEmpty()) {
+            String avatar = userService.uploadAvatar(userId, file);
+
+            userResponse.setAvatar(avatar);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(userResponse);
     }
     @DeleteMapping("/{userId}")
     ResponseEntity<String> deleteUser(@PathVariable("userId") String userId) {

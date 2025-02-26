@@ -18,9 +18,6 @@ public class UserRequest {
 
     String email;
 
-    @JsonProperty("avatar")
-    String avatar;
-
     @JsonProperty("gender")
     String gender;
 
