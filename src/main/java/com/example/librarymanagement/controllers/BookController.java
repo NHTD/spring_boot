@@ -2,12 +2,16 @@ package com.example.librarymanagement.controllers;
 
 import com.example.librarymanagement.dtos.request.BookRequest;
 import com.example.librarymanagement.dtos.request.BookUpdateRequest;
+import com.example.librarymanagement.dtos.response.BookListResponse;
 import com.example.librarymanagement.dtos.response.BookResponse;
 import com.example.librarymanagement.enums.BookStatusEnum;
 import com.example.librarymanagement.services.BookService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +32,21 @@ public class BookController {
     }
 
     @GetMapping
-    ResponseEntity<List<BookResponse>> getBooks() {
-        return ResponseEntity.status(HttpStatus.OK).body(bookService.getBooks());
+    ResponseEntity<BookListResponse> getBooks(
+            @RequestParam(defaultValue = "0") int offset,
+            @RequestParam(defaultValue = "10") int limit
+    ) {
+        PageRequest pageRequest = PageRequest.of(
+                offset, limit,
+                Sort.by("id").ascending()
+        );
+
+        Page<BookResponse> bookPage = bookService.getBooks(pageRequest);
+
+        List<BookResponse> bookResponses = bookPage.getContent();
+        long totalPage = bookPage.getTotalElements();
+
+        return ResponseEntity.status(HttpStatus.OK).body(BookListResponse.builder().bookResponses(bookResponses).totalPage(totalPage).build());
     }
 
     @PutMapping("/bookId")
