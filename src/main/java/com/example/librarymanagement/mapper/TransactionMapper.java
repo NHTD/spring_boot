@@ -9,7 +9,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface TransactionMapper {
     Transaction toTransaction(TransactionRequest request);
-    TransactionResponse toTransactionResponse(Transaction category);
+    TransactionResponse toTransactionResponse(Transaction transaction);
 
     void toUpdateTransaction(@MappingTarget Transaction transaction, TransactionRequest request);
 }

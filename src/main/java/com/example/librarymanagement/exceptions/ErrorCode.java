@@ -21,6 +21,9 @@ public enum ErrorCode {
 
     BOOK_EXISTED(HttpStatus.CONFLICT.value(), "Book existed", HttpStatus.CONFLICT.getReasonPhrase()),
     BOOK_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "This book is not found", HttpStatus.NOT_FOUND.getReasonPhrase()),
+    BOOK_NOT_BORROWED(HttpStatus.NOT_FOUND.value(), "This book is not borrowed", HttpStatus.NOT_FOUND.getReasonPhrase()),
+
+    TRANSACTION_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "This transaction is not found", HttpStatus.NOT_FOUND.getReasonPhrase()),
 
     STATUS_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "This status is not supported", HttpStatus.NOT_FOUND.getReasonPhrase()),
 

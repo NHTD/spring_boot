@@ -27,7 +27,7 @@ public class SecurityConfig {
 
     final UserDetailsService userDetailService;
 
-    final String[] POST_PUBLIC = {"/users", "/authenticate"};
+    final String[] POST_PUBLIC = {"/users", "/authenticate", "transactions/**"};
     final String[] GET_PUBLIC = {"/users/**", "/categories"};
     final String[] PUT_PUBLIC = {"/users/**"};
     final String[] DELETE_PUBLIC = {"/users/**", "/categories"};
