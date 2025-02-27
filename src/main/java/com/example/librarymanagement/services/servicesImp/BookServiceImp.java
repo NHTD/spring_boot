@@ -10,9 +10,11 @@ import com.example.librarymanagement.exceptions.ErrorCode;
 import com.example.librarymanagement.mapper.BookMapper;
 import com.example.librarymanagement.models.Book;
 import com.example.librarymanagement.models.Category;
+import com.example.librarymanagement.models.Transaction;
 import com.example.librarymanagement.models.User;
 import com.example.librarymanagement.repositories.BookRepository;
 import com.example.librarymanagement.repositories.CategoryRepository;
+import com.example.librarymanagement.repositories.TransactionRepository;
 import com.example.librarymanagement.repositories.UserRepository;
 import com.example.librarymanagement.services.BookService;
 import com.example.librarymanagement.services.CloudinaryService;
@@ -22,9 +24,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +41,8 @@ public class BookServiceImp implements BookService {
     BookRepository bookRepository;
     CategoryRepository categoryRepository;
     UserRepository userRepository;
+    TransactionRepository transactionRepository;
+
     CloudinaryService cloudinaryService;
 
     BookMapper bookMapper;
@@ -116,5 +123,19 @@ public class BookServiceImp implements BookService {
         List<Book> books = bookRepository.getAllByStatus(BookStatusEnum.Borrowed);
 
         return books.stream().map(bookMapper::toBookResponse).collect(Collectors.toList());
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    @Transactional
+    public void updateOverdueBooks() {
+        LocalDateTime overdueDate = LocalDateTime.now().minusDays(14);
+
+        List<Transaction> transactions = transactionRepository.findOverdueTransactions(overdueDate);
+
+        for (Transaction transaction : transactions) {
+            Book book = transaction.getBook();
+            book.setStatus(BookStatusEnum.Overdue);
+            bookRepository.save(book);
+        }
     }
 }

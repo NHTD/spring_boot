@@ -5,7 +5,6 @@ import com.example.librarymanagement.dtos.request.BookUpdateRequest;
 import com.example.librarymanagement.dtos.response.BookListResponse;
 import com.example.librarymanagement.dtos.response.BookResponse;
 import com.example.librarymanagement.enums.BookStatusEnum;
-import com.example.librarymanagement.models.Book;
 import com.example.librarymanagement.services.BookService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -61,12 +60,12 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.OK).body(BookListResponse.builder().bookResponses(bookResponses).totalPage(totalPage).build());
     }
 
-    @PutMapping("/bookId")
+    @PutMapping("/{bookId}")
     ResponseEntity<BookResponse> updateBook(@PathVariable("bookId") Long id, @RequestBody BookUpdateRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(bookService.updateBook(id, request));
     }
 
-    @DeleteMapping("/bookId")
+    @DeleteMapping("/{bookId}")
     ResponseEntity<String> deleteBook(@PathVariable("bookId") Long bookId) {
         bookService.deleteBook(bookId);
         return ResponseEntity.status(HttpStatus.OK).body("Delete successfully");
@@ -80,5 +79,11 @@ public class BookController {
     @GetMapping("/borrowed")
     ResponseEntity<List<BookResponse>> getBorrowedBooks() {
         return ResponseEntity.status(HttpStatus.OK).body(bookService.getBorrowedBooks());
+    }
+
+    @PutMapping("/overdue")
+    public ResponseEntity<String> updateOverdueBooks() {
+        bookService.updateOverdueBooks();
+        return ResponseEntity.status(HttpStatus.OK).body("Update overdue successful");
     }
 }

@@ -19,4 +19,5 @@ public interface BookService {
     String uploadBookImage(Long bookId, MultipartFile file) throws Exception;
     List<BookResponse> getAvailableBooks();
     List<BookResponse> getBorrowedBooks();
+    void updateOverdueBooks();
 }
