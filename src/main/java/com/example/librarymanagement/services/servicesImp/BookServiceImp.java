@@ -25,6 +25,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -99,5 +102,19 @@ public class BookServiceImp implements BookService {
         bookRepository.save(book);
 
         return response.getUrl();
+    }
+
+    @Override
+    public List<BookResponse> getAvailableBooks() {
+        List<Book> books = bookRepository.getAllByStatus(BookStatusEnum.InStock);
+
+        return books.stream().map(bookMapper::toBookResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookResponse> getBorrowedBooks() {
+        List<Book> books = bookRepository.getAllByStatus(BookStatusEnum.Borrowed);
+
+        return books.stream().map(bookMapper::toBookResponse).collect(Collectors.toList());
     }
 }

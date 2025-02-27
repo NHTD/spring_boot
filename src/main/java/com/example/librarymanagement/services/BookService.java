@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 
 public interface BookService {
     BookResponse createBook(BookRequest request, BookStatusEnum status);
@@ -15,4 +17,6 @@ public interface BookService {
     BookResponse updateBook(Long id, BookUpdateRequest request);
     void deleteBook(Long id);
     String uploadBookImage(Long bookId, MultipartFile file) throws Exception;
+    List<BookResponse> getAvailableBooks();
+    List<BookResponse> getBorrowedBooks();
 }

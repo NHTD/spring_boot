@@ -5,6 +5,7 @@ import com.example.librarymanagement.dtos.request.BookUpdateRequest;
 import com.example.librarymanagement.dtos.response.BookListResponse;
 import com.example.librarymanagement.dtos.response.BookResponse;
 import com.example.librarymanagement.enums.BookStatusEnum;
+import com.example.librarymanagement.models.Book;
 import com.example.librarymanagement.services.BookService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -71,4 +72,13 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.OK).body("Delete successfully");
     }
 
+    @GetMapping("/available")
+    ResponseEntity<List<BookResponse>> getAvailableBook() {
+        return ResponseEntity.status(HttpStatus.OK).body(bookService.getAvailableBooks());
+    }
+
+    @GetMapping("/borrowed")
+    ResponseEntity<List<BookResponse>> getBorrowedBooks() {
+        return ResponseEntity.status(HttpStatus.OK).body(bookService.getBorrowedBooks());
+    }
 }
