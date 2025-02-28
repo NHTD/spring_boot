@@ -17,7 +17,6 @@ public interface BookService {
     BookResponse updateBook(Long id, BookUpdateRequest request);
     void deleteBook(Long id);
     String uploadBookImage(Long bookId, MultipartFile file) throws Exception;
-    List<BookResponse> getAvailableBooks();
-    List<BookResponse> getBorrowedBooks();
+    List<BookResponse> getAllBookStatuses(String bookStatus);
     void updateOverdueBooks();
 }

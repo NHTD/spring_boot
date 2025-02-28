@@ -71,14 +71,11 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.OK).body("Delete successfully");
     }
 
-    @GetMapping("/available")
-    ResponseEntity<List<BookResponse>> getAvailableBook() {
-        return ResponseEntity.status(HttpStatus.OK).body(bookService.getAvailableBooks());
-    }
-
-    @GetMapping("/borrowed")
-    ResponseEntity<List<BookResponse>> getBorrowedBooks() {
-        return ResponseEntity.status(HttpStatus.OK).body(bookService.getBorrowedBooks());
+    @GetMapping("/book-status")
+    ResponseEntity<List<BookResponse>> getAvailableBook(
+            @RequestParam(defaultValue = "", required = false) String bookStatus
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllBookStatuses(bookStatus));
     }
 
     @PutMapping("/overdue")

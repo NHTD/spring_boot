@@ -1,0 +1,2 @@
+ALTER TABLE books ADD COLUMN price INT;
+ALTER TABLE books ADD COLUMN star INT;

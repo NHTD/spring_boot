@@ -9,14 +9,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
-    Optional<Book> findBookByTitle(String title);
-
     @Query("select b from Book b")
     Page<Book> getAllBook(Pageable pageable);
 
-    List<Book> getAllByStatus(BookStatusEnum status);
+    @Query("select b from Book b where (:bookStatus is null or :bookStatus = '' or b.status = %:bookStatus%)")
+    List<Book> getAllByStatus(BookStatusEnum bookStatus);
 }

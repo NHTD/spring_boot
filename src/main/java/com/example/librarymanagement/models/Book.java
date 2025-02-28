@@ -29,6 +29,12 @@ public class Book {
     @Column(name = "description")
     String description;
 
+    @Column(name = "star")
+    int star;
+
+    @Column(name = "price")
+    int price;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     Category category;

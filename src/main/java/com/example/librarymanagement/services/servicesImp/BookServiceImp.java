@@ -112,18 +112,23 @@ public class BookServiceImp implements BookService {
     }
 
     @Override
-    public List<BookResponse> getAvailableBooks() {
-        List<Book> books = bookRepository.getAllByStatus(BookStatusEnum.InStock);
+    public List<BookResponse> getAllBookStatuses(String bookStatus) {
+        BookStatusEnum bookStatusEnum;
+        try {
+            bookStatusEnum = BookStatusEnum.fromString(bookStatus);
+        } catch (AppException e) {
+            throw new AppException(ErrorCode.BOOK_STATUS_NOT_VALID);
+        }
 
+        if (!(bookStatusEnum == BookStatusEnum.InStock || bookStatusEnum == BookStatusEnum.Borrowed
+                || bookStatusEnum == BookStatusEnum.Overdue)) {
+            throw new AppException(ErrorCode.BOOK_STATUS_NOT_VALID);
+        }
+
+        List<Book> books = bookRepository.getAllByStatus(bookStatusEnum);
         return books.stream().map(bookMapper::toBookResponse).collect(Collectors.toList());
     }
 
-    @Override
-    public List<BookResponse> getBorrowedBooks() {
-        List<Book> books = bookRepository.getAllByStatus(BookStatusEnum.Borrowed);
-
-        return books.stream().map(bookMapper::toBookResponse).collect(Collectors.toList());
-    }
 
     @Scheduled(cron = "0 0 0 * * *")
     @Transactional

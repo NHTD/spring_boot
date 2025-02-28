@@ -23,6 +23,10 @@ public class BookResponse {
 
     String description;
 
+    int price;
+
+    int star;
+
     Category category;
 
     User user;
