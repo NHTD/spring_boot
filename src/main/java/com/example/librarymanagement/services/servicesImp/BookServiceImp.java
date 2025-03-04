@@ -31,7 +31,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -68,8 +67,26 @@ public class BookServiceImp implements BookService {
     }
 
     @Override
-    public Page<BookResponse> getBooks(Pageable pageable) {
-        Page<Book> bookPage = bookRepository.getAllBook(pageable);
+    public Page<BookResponse> getBooks(Pageable pageable, String bookStatus) {
+        if(bookStatus.equals("")){
+            Page<Book> bookPage = bookRepository.getAllBook(pageable);
+            return bookPage.map(bookMapper::toBookResponse);
+        }
+
+        BookStatusEnum bookStatusEnum;
+        try {
+            bookStatusEnum = BookStatusEnum.fromString(bookStatus);
+
+        } catch (AppException e) {
+            throw new AppException(ErrorCode.BOOK_STATUS_NOT_VALID);
+        }
+
+        if (!(bookStatusEnum == BookStatusEnum.InStock || bookStatusEnum == BookStatusEnum.Borrowed
+                || bookStatusEnum == BookStatusEnum.Overdue)) {
+            throw new AppException(ErrorCode.BOOK_STATUS_NOT_VALID);
+        }
+
+        Page<Book> bookPage = bookRepository.getAllByStatus(pageable, bookStatusEnum);
         return bookPage.map(bookMapper::toBookResponse);
     }
 
@@ -109,24 +126,6 @@ public class BookServiceImp implements BookService {
         bookRepository.save(book);
 
         return response.getUrl();
-    }
-
-    @Override
-    public List<BookResponse> getAllBookStatuses(String bookStatus) {
-        BookStatusEnum bookStatusEnum;
-        try {
-            bookStatusEnum = BookStatusEnum.fromString(bookStatus);
-        } catch (AppException e) {
-            throw new AppException(ErrorCode.BOOK_STATUS_NOT_VALID);
-        }
-
-        if (!(bookStatusEnum == BookStatusEnum.InStock || bookStatusEnum == BookStatusEnum.Borrowed
-                || bookStatusEnum == BookStatusEnum.Overdue)) {
-            throw new AppException(ErrorCode.BOOK_STATUS_NOT_VALID);
-        }
-
-        List<Book> books = bookRepository.getAllByStatus(bookStatusEnum);
-        return books.stream().map(bookMapper::toBookResponse).collect(Collectors.toList());
     }
 
 

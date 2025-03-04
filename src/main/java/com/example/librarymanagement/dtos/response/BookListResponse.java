@@ -12,5 +12,5 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookListResponse {
     List<BookResponse> bookResponses;
-    long totalPage;
+    long totalPages;
 }

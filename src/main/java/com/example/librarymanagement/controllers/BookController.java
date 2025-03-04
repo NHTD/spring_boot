@@ -45,19 +45,20 @@ public class BookController {
     @GetMapping
     ResponseEntity<BookListResponse> getBooks(
             @RequestParam(defaultValue = "0") int offset,
-            @RequestParam(defaultValue = "10") int limit
+            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(defaultValue = "", required = false) String bookStatus
     ) {
         PageRequest pageRequest = PageRequest.of(
                 offset, limit,
                 Sort.by("id").ascending()
         );
 
-        Page<BookResponse> bookPage = bookService.getBooks(pageRequest);
+        Page<BookResponse> bookPage = bookService.getBooks(pageRequest, bookStatus);
 
         List<BookResponse> bookResponses = bookPage.getContent();
         long totalPage = bookPage.getTotalElements();
 
-        return ResponseEntity.status(HttpStatus.OK).body(BookListResponse.builder().bookResponses(bookResponses).totalPage(totalPage).build());
+        return ResponseEntity.status(HttpStatus.OK).body(BookListResponse.builder().bookResponses(bookResponses).totalPages(totalPage).build());
     }
 
     @PutMapping("/{bookId}")
@@ -69,13 +70,6 @@ public class BookController {
     ResponseEntity<String> deleteBook(@PathVariable("bookId") Long bookId) {
         bookService.deleteBook(bookId);
         return ResponseEntity.status(HttpStatus.OK).body("Delete successfully");
-    }
-
-    @GetMapping("/book-status")
-    ResponseEntity<List<BookResponse>> getAvailableBook(
-            @RequestParam(defaultValue = "", required = false) String bookStatus
-    ) {
-        return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllBookStatuses(bookStatus));
     }
 
     @PutMapping("/overdue")

@@ -13,10 +13,9 @@ import java.util.List;
 
 public interface BookService {
     BookResponse createBook(BookRequest request, BookStatusEnum status);
-    Page<BookResponse> getBooks(Pageable pageable);
+    Page<BookResponse> getBooks(Pageable pageable, String bookStatus);
     BookResponse updateBook(Long id, BookUpdateRequest request);
     void deleteBook(Long id);
     String uploadBookImage(Long bookId, MultipartFile file) throws Exception;
-    List<BookResponse> getAllBookStatuses(String bookStatus);
     void updateOverdueBooks();
 }

@@ -16,5 +16,5 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Page<Book> getAllBook(Pageable pageable);
 
     @Query("select b from Book b where (:bookStatus is null or :bookStatus = '' or b.status = %:bookStatus%)")
-    List<Book> getAllByStatus(BookStatusEnum bookStatus);
+    Page<Book> getAllByStatus(Pageable pageable, BookStatusEnum bookStatus);
 }
