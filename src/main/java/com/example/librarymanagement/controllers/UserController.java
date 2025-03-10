@@ -55,4 +55,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body("Delete successfully");
     }
 
+    @PostMapping("/user-details")
+    ResponseEntity<UserResponse> getUser(@RequestHeader("Authorization") String token) {
+        String extractedToken = token.substring(7);
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserDetail(extractedToken));
+    }
 }

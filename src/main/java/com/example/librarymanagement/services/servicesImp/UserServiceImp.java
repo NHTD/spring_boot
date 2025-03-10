@@ -12,9 +12,13 @@ import com.example.librarymanagement.models.Role;
 import com.example.librarymanagement.models.User;
 import com.example.librarymanagement.repositories.RoleRepository;
 import com.example.librarymanagement.repositories.UserRepository;
+import com.example.librarymanagement.security.JwtConstant;
 import com.example.librarymanagement.services.CloudinaryService;
 import com.example.librarymanagement.services.UserService;
 import com.example.librarymanagement.utils.FileUploadUtils;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,7 +26,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.crypto.SecretKey;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -101,6 +107,27 @@ public class UserServiceImp implements UserService {
         userRepository.save(user);
 
         return response.getUrl();
+    }
+
+    @Override
+    public UserResponse getUserDetail(String token) {
+        SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
+        Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        boolean isTokenValid = claims.getExpiration().before(new Date());
+
+        if(isTokenValid){
+            throw new AppException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        String email = String.valueOf(claims.get("email"));
+        if(email.isEmpty()){
+            throw new AppException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        return userMapper.toUserResponse(user);
     }
 
     @Override

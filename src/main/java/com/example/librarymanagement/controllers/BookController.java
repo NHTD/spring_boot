@@ -45,7 +45,7 @@ public class BookController {
     @GetMapping
     ResponseEntity<BookListResponse> getBooks(
             @RequestParam(defaultValue = "0") int offset,
-            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(defaultValue = "6") int limit,
             @RequestParam(defaultValue = "", required = false) String bookStatus
     ) {
         PageRequest pageRequest = PageRequest.of(

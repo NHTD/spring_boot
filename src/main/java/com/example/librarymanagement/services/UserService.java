@@ -18,4 +18,6 @@ public interface UserService {
     UserResponse updateUser(String userId, UserUpdateRequest request);
 
     String uploadAvatar(String userId, MultipartFile file) throws Exception;
+
+    UserResponse getUserDetail(String token);
 }
